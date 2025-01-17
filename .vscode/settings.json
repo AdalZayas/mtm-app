@@ -1,0 +1,9 @@
+{
+  "editor.trimAutoWhitespace": true,
+  "editor.formatOnSave": true,
+  // line length of 180
+  "editor.rulers": [180],
+  "editor.tabSize": 2,
+  "editor.wordWrap": "on",
+  "editor.wordWrapColumn": 180
+}
