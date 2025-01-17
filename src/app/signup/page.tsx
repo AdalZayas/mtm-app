@@ -1,6 +1,7 @@
 "use client";
 import DriverLicense from "@mtm/components/DriverLicense";
 import Form from "@mtm/components/form/Form";
+import ImageUpload from "@mtm/components/form/ImageUpload";
 import Input from "@mtm/components/form/Input";
 import Selector from "@mtm/components/form/Selector";
 import { useForm } from "@mtm/hooks/useForm";
@@ -34,7 +35,14 @@ function SingnUp() {
     },
   ];
 
-  const { values, handleInputChange, handleSubmit } = useForm({
+  const {
+    values,
+    handleInputChange,
+    handleSubmit,
+    previews,
+    // files,
+    handleFileChange,
+  } = useForm({
     initialValues: {
       driverName: "John Doe",
       teamName: "Ferrari",
@@ -42,10 +50,11 @@ function SingnUp() {
       country: "MX",
       number: 33,
       email: "",
+      image: "",
     },
   });
 
-  const handleFormSubmit = (data: Record<string, string | number>) => {
+  const handleFormSubmit = (data: Record<string, string | number | null>) => {
     console.log("Form Data:", data);
   };
 
@@ -97,6 +106,15 @@ function SingnUp() {
             placeholder="johnDoe33@email.com"
             onChange={(e) => handleInputChange("email", e.target.value)}
           />
+
+          <ImageUpload
+            id="driverImage"
+            label="Driver Image"
+            onChange={(e) => {
+              const file = (e.target as HTMLInputElement).files?.[0];
+              if (file) handleFileChange("image", file);
+            }}
+          />
         </Form>
       </div>
       <DriverLicense
@@ -105,6 +123,7 @@ function SingnUp() {
         age={Number(values.age)}
         country={values.country as string}
         number={Number(values.number)}
+        image={previews.image as string}
       />
     </div>
   );

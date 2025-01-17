@@ -13,7 +13,7 @@ export type CardProps = {
   onClick?: () => void;
 };
 
-const Card: React.FC<CardProps> = ({
+const DriverCard: React.FC<CardProps> = ({
   driverName = "Dri Ver",
   driverImage = "https://placehold.co/600x400",
   teamName = "Team Name",
@@ -35,14 +35,21 @@ const Card: React.FC<CardProps> = ({
       <p className="card__content">
         Country: <Flag className="ml-2" code="MX" width={50} />
       </p>
-      <button 
-        className="button button--primary button--full button--size-md"
+      {/* <button
+        className="button button--primary button--full button--size-default"
         onClick={onClick}
       >
         More Info
-      </button>
+      </button> */}
+      <Buttton
+        text="More Info"
+        color="primary"
+        size="lg"
+        full
+        onClick={onClick}
+      />
     </div>
   );
 };
 
-export default Card;
+export default DriverCard;

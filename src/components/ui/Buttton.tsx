@@ -4,7 +4,8 @@ import React from "react";
 interface ButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> {
   text: string;
   color?: "primary" | "secondary" | "danger";
-  size?: "default" | "sm" | "lg" | "icon" | "defaultFull" | "smFull" | "lgFull";
+  size?: "md" | "sm" | "lg";
+  full?: boolean;
 }
 
 const Buttton: React.FC<ButtonProps> = ({
@@ -13,15 +14,31 @@ const Buttton: React.FC<ButtonProps> = ({
   size = "md",
   ...props
 }) => {
-  const buttonClasses = [
-    "button",
-    `button--${color}`,
-    `button--size-${size}`,
-    props.className,
-    size?.includes("Full") ? "button--full" : "",
-  ]
-    .filter(Boolean)
-    .join(" ");
+  let buttonClasses = `button`;
+
+  const colorClasses = {
+    primary: "button--primary",
+    secondary: "button--secondary",
+    danger: "button--danger",
+  };
+
+  const sizeClasses = {
+    md: "button--size-md",
+    sm: "button--size-sm",
+    lg: "button--size-lg",
+  };
+
+  if (colorClasses[color]) {
+    buttonClasses += ` ${colorClasses[color]}`;
+  }
+
+  if (sizeClasses[size]) {
+    buttonClasses += ` ${sizeClasses[size]}`;
+  }
+
+  if (props.full) {
+    buttonClasses += ` button--full`;
+  }
 
   return (
     <button

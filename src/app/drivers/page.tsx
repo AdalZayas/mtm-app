@@ -1,11 +1,13 @@
 "use client";
-import Card from "@mtm/components/ui/Card";
+import DriverCard from "@mtm/components/ui/DriverCard";
 import Divider from "@mtm/components/ui/Divider";
 import Modal from "@mtm/components/ui/Modal";
 import { SEASON_8_TEAMS } from "@mtm/data/cars";
 import useModal from "@mtm/hooks/useModal";
 import Image from "next/image";
 import Flag from "react-world-flags";
+import SideBar from "@mtm/components/ui/SideBar";
+import { useEffect, useState } from "react";
 
 export default function Home() {
   const { isOpen, data, openModal, closeModal } = useModal<{
@@ -13,10 +15,25 @@ export default function Home() {
     profilePicture: string;
     team: string;
   }>();
-  const driversCards = SEASON_8_TEAMS.map((team) => {
-    return team.drivers.map((driver, index) => (
-      <Card
-        key={index}
+
+  // Estado para equipos seleccionados
+  const [selectedTeams, setSelectedTeams] = useState<string[]>([]);
+  const [title, setTitle] = useState<string>("All Teams");
+  useEffect(() => {
+    if (selectedTeams.length > 0) {
+      setTitle(`Selected Teams: ${selectedTeams.join(", ")}`);
+    } else {
+      setTitle("All Teams");
+    }
+  }, [selectedTeams]);
+
+  // Filtrar conductores según los equipos seleccionados
+  const filteredDrivers = SEASON_8_TEAMS.filter(
+    (team) => selectedTeams.length === 0 || selectedTeams.includes(team.name)
+  ).flatMap((team) =>
+    team.drivers.map((driver, index) => (
+      <DriverCard
+        key={`${team.name}-${index}`}
         driverName={driver.name}
         teamName={team.name}
         driverImage={driver.profilePicture}
@@ -29,12 +46,31 @@ export default function Home() {
           })
         }
       />
-    ));
-  });
+    ))
+  );
+
+  // Manejo de selección de equipos
+  const handleCheckBox = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const teamName = e.target.id; // Nombre del equipo como id del checkbox
+    if (e.target.checked) {
+      setSelectedTeams([...selectedTeams, teamName]);
+    } else {
+      setSelectedTeams(selectedTeams.filter((team) => team !== teamName));
+    }
+  };
+
+  // Obtener lista de equipos
+  const teams = SEASON_8_TEAMS.map((team) => team.name);
 
   return (
-    <div className="h-full flex mx-24 my-16 ">
-      <div className="grid grid-cols-5 gap-2">{driversCards}</div>
+    <div className="flex mx-24 my-16">
+      {/* Barra lateral con checkboxes */}
+      <SideBar selected={title} items={teams} onClick={handleCheckBox} />
+
+      {/* Conductores filtrados */}
+      <div className="grid grid-cols-4 gap-4">{filteredDrivers}</div>
+
+      {/* Modal con información del conductor */}
       <Modal isOpen={isOpen} onClose={() => closeModal()}>
         {data && (
           <div>

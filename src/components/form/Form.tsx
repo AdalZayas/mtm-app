@@ -10,7 +10,7 @@ export default function Form({ onSubmit, children }: FormProps) {
   return (
     <form onSubmit={onSubmit} className="form">
       {children}
-      <Buttton type="submit" text="Submit" color="primary" size="default" />
+      <Buttton type="submit" text="Submit" color="primary" size="md" />
     </form>
   );
 }

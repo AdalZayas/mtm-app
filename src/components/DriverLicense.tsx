@@ -8,6 +8,7 @@ interface DriverLicenseProps {
   age: number;
   country: string;
   number: number;
+  image?: string;
 }
 
 export default function DriverLicense({
@@ -16,16 +17,16 @@ export default function DriverLicense({
   age,
   country,
   number,
+  image,
 }: DriverLicenseProps) {
+  if (!image) {
+    image = "https://placehold.co/220x317";
+  }
   return (
     <div className="driver-license">
       <div className="driver-license__content">
-        <Image
-          src="https://placehold.co/310x400"
-          width={190}
-          height={200}
-          alt="pilot"
-        />
+        <Image src={image} width={220} height={200} alt="pilot" />
+
         <div className="driver-license__info">
           <h1 className="driver-license__name">{driverName}</h1>
           <p className="driver-license__team">{teamName}</p>
